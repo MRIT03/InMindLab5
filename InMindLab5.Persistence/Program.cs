@@ -12,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 Console.WriteLine("to add a top level domain"); 
 builder.Services.AddDbContext<UmcContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("UniversityConnection")));
 
 
 builder.Services.AddControllers();
