@@ -1,0 +1,7 @@
+﻿namespace InMindLab5.Domain.Entities;
+
+public class Admin
+{
+    public required int AdminId { get; set; }
+    public required string Name { get; set; }
+}
