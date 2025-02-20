@@ -20,6 +20,10 @@
     <ItemGroup>
       <ProjectReference Include="..\InMindLab5.Domain\InMindLab5.Domain.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Data\Repositories\" />
+    </ItemGroup>
     
     
     
