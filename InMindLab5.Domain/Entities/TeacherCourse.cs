@@ -14,4 +14,7 @@ public class TeacherCourse
     public TimeOnly ClassStart { get; set; }
     [Required]
     public TimeOnly ClassEnd { get; set; }
+    
+    public Teacher Teacher { get; set; }
+    public Course Course { get; set; }
 }
