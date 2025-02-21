@@ -2,12 +2,12 @@
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
+        <OutputType>Library</OutputType>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Commands\" />
       <Folder Include="Queries\" />
     </ItemGroup>
 
@@ -17,6 +17,8 @@
     
     <ItemGroup>
       <ProjectReference Include="..\InMindLab5.Domain\InMindLab5.Domain.csproj" />
+      <ProjectReference Include="..\InMindLab5.Persistence\InMindLab5.Persistence.csproj" />
     </ItemGroup>
+
 
 </Project>

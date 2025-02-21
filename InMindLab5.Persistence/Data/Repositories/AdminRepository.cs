@@ -40,4 +40,9 @@ public class AdminRepository : IRepository<Admin>
     {
         await _dbContext.SaveChangesAsync();
     }
+
+    public Boolean Exists(Admin admin)
+    {
+        return  _dbContext.Admins.Contains(admin);
+    }
 }
