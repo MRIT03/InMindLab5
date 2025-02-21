@@ -30,4 +30,22 @@ public class UniversityController : ControllerBase
         return Ok(createdCourse);
         
     }
+
+    [HttpPost("[action]/{teacherId:int}")]
+    public async Task<IActionResult> CreateClass([FromRoute] int teacherId, [FromBody] TeacherCourseDto teacherCourse)
+    {
+
+        TeacherCreateClassCommand command = new TeacherCreateClassCommand
+        {
+            TeacherId = teacherId,
+            CourseId = teacherCourse.Course.CourseId,
+            ClassStart = teacherCourse.ClassStart,
+            ClassEnd = teacherCourse.ClassEnd,
+        };
+        
+        var createdClass = await _mediator.Send(command);
+        
+        return Ok(createdClass);
+        
+    }
 }

@@ -5,7 +5,7 @@ using MediatR;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-
+using InMindLab5.Application.Mappers;
 namespace InMindLab5.Application.Commands;
 
 public class AdminCreateCourseHandler : IRequestHandler<AdminCreateCourseCommand, CourseDto>
