@@ -10,7 +10,6 @@
       <Folder Include="Commands\" />
       <Folder Include="Mappers\" />
       <Folder Include="Queries\" />
-      <Folder Include="DTO\" />
     </ItemGroup>
 
     <ItemGroup>
