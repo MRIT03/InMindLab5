@@ -10,8 +10,8 @@ public static class EntrollMapper
         return new EnrollDto
         {
             Id = enroll.EnrollId,
-            Course = enroll.Course,
-            Student = enroll.Student,
+            CourseId = enroll.CourseId,
+            StudentId = enroll.StudentId,
             EnrollementDate = enroll.Date,
         };
     }

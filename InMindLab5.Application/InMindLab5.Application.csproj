@@ -16,6 +16,7 @@
     </ItemGroup>
     
     <ItemGroup>
+      <ProjectReference Include="..\InMindLab5.Common\InMindLab5.Common.csproj" />
       <ProjectReference Include="..\InMindLab5.Domain\InMindLab5.Domain.csproj" />
       <ProjectReference Include="..\InMindLab5.Persistence\InMindLab5.Persistence.csproj" />
     </ItemGroup>

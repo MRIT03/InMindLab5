@@ -28,6 +28,7 @@ public class AdminCreateCourseHandler : IRequestHandler<AdminCreateCourseCommand
             CourseId = request.CourseToBeCreated.Id,
             Name = request.CourseToBeCreated.Title,
             MaxNb = request.CourseToBeCreated.MaxStudents,
+            AdminId = request.AdminId,
             EnrollStart = DateTime.SpecifyKind( request.CourseToBeCreated.EnrollementStart, DateTimeKind.Utc),
             EnrollEnd =  DateTime.SpecifyKind(request.CourseToBeCreated.EnrollementEnd, DateTimeKind.Utc),
         };

@@ -23,7 +23,9 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Admin
 // Register Repositories
 builder.Services.AddScoped<IRepository<Course>, CourseRepository>();
 builder.Services.AddScoped<IRepository<Admin>, AdminRepository>();
-
+builder.Services.AddScoped<IRepository<TeacherCourse>, TeacherCourseRepository>();
+builder.Services.AddScoped<IRepository<Course>, CourseRepository>();
+builder.Services.AddScoped<IRepository<Enroll>, EnrollRepository>();
 
 // Add Controllers
 builder.Services.AddControllers();

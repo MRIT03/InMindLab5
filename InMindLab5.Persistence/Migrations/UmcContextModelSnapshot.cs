@@ -65,6 +65,8 @@ namespace InMindLab5.Persistence.Migrations
 
                     b.HasKey("CourseId");
 
+                    b.HasIndex("AdminId");
+
                     b.ToTable("Courses");
                 });
 
@@ -163,6 +165,17 @@ namespace InMindLab5.Persistence.Migrations
                     b.ToTable("TeacherCourses");
                 });
 
+            modelBuilder.Entity("InMindLab5.Domain.Entities.Course", b =>
+                {
+                    b.HasOne("InMindLab5.Domain.Entities.Admin", "Admin")
+                        .WithMany("Courses")
+                        .HasForeignKey("AdminId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Admin");
+                });
+
             modelBuilder.Entity("InMindLab5.Domain.Entities.Enroll", b =>
                 {
                     b.HasOne("InMindLab5.Domain.Entities.Course", "Course")
@@ -199,6 +212,11 @@ namespace InMindLab5.Persistence.Migrations
                     b.Navigation("Course");
 
                     b.Navigation("Teacher");
+                });
+
+            modelBuilder.Entity("InMindLab5.Domain.Entities.Admin", b =>
+                {
+                    b.Navigation("Courses");
                 });
 
             modelBuilder.Entity("InMindLab5.Domain.Entities.Teacher", b =>

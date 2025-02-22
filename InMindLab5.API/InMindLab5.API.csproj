@@ -24,4 +24,8 @@
         </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Microsoft.AspNet.WebApi.Versioning" Version="5.1.0" />
+    </ItemGroup>
+
 </Project>

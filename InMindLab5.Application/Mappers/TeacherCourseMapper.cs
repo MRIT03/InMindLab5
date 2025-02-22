@@ -10,8 +10,8 @@ public static class TeacherCourseMapper
         return new TeacherCourseDto
         {
             Id = teacherCourse.TeacherCourseId,
-            Teacher = teacherCourse.Teacher,
-            Course = teacherCourse.Course,
+            TeacherId = teacherCourse.TeacherId,
+            CourseId = teacherCourse.CourseId,
             ClassStart = teacherCourse.ClassStart,
             ClassEnd = teacherCourse.ClassEnd,
         };

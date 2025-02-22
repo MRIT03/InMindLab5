@@ -28,4 +28,5 @@ public class Course
     }
     [Required]
     public int AdminId { get; set; } //this represents the foreign key
+    public virtual Admin Admin { get; set; }  // Navigation Property
 }

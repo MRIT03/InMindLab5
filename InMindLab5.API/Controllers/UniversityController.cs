@@ -2,12 +2,14 @@
 using InMindLab5.Application.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.Web.Http;
+using Microsoft.A;
 namespace InMindLab5.Application.Controllers;
 
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/v{version:apiVersion}/[controller]")]
+[ApiVersion("1.0")]
 public class UniversityController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -38,7 +40,7 @@ public class UniversityController : ControllerBase
         TeacherCreateClassCommand command = new TeacherCreateClassCommand
         {
             TeacherId = teacherId,
-            CourseId = teacherCourse.Course.CourseId,
+            CourseId = teacherCourse.CourseId,
             ClassStart = teacherCourse.ClassStart,
             ClassEnd = teacherCourse.ClassEnd,
         };
@@ -46,6 +48,27 @@ public class UniversityController : ControllerBase
         var createdClass = await _mediator.Send(command);
         
         return Ok(createdClass);
+        
+    }
+
+    [HttpPost("[action]/{studentId:int}")]
+    public async Task<IActionResult> Enroll([FromRoute] int studentId, [FromBody] EnrollDto enroll)
+    {
+        StudentEnrollClassCommand command = new StudentEnrollClassCommand
+        {
+            EnrollId = enroll.Id,
+            StudentId = studentId,
+            CourseId = enroll.CourseId,
+            EnrollDate = enroll.EnrollementDate
+        };
+        var enrolledCourseResult = await _mediator.Send(command);
+        if (enrolledCourseResult.IsSuccess)
+        {
+            return Ok(enrolledCourseResult.Value);
+        }
+        return BadRequest(enrolledCourseResult.Error);
+        
+        
         
     }
 }

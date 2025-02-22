@@ -19,6 +19,7 @@ public class TeacherCreateClassHandler : IRequestHandler<TeacherCreateClassComma
     {
         TeacherCourse newTeacherCourse = new TeacherCourse
         {
+            TeacherCourseId = request.Id,
             TeacherId = request.TeacherId,
             CourseId = request.CourseId,
             ClassStart = request.ClassStart,
