@@ -21,11 +21,7 @@ public class StudentEnrollClassHandler : IRequestHandler<StudentEnrollClassComma
     public async Task<Result<EnrollDto>> Handle(StudentEnrollClassCommand request, CancellationToken cancellationToken)
     {
         Course course = _CourseRepository.Query.Single(x => x.CourseId == request.CourseId);
-        Console.WriteLine(course.EnrollStart);
-        Console.WriteLine(request.EnrollDate);
-        Console.WriteLine(course.EnrollEnd);
-        Console.WriteLine(request.EnrollDate >= course.EnrollStart &&
-                          request.EnrollDate <= course.EnrollEnd);
+        
         if (request.EnrollDate >= course.EnrollStart &&
             request.EnrollDate <= course.EnrollEnd)
         {

@@ -1,15 +1,15 @@
-﻿using InMindLab5.Application.Commands;
+﻿using Asp.Versioning;
+using InMindLab5.Application.Commands;
 using InMindLab5.Application.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Web.Http;
-
-namespace InMindLab5.Application.Controllers;
 
 
+namespace InMindLab5.API.Controllers;
+
+[ApiVersion( 1.0 )]
 [ApiController]
-[Route("api/[controller]")]
-
+[Route("api/v{version:apiVersion}/[controller]")]
 public class UniversityController : ControllerBase
 {
     private readonly IMediator _mediator;
