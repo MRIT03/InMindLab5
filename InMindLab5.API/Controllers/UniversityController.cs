@@ -67,8 +67,27 @@ public class UniversityController : ControllerBase
             return Ok(enrolledCourseResult.Value);
         }
         return BadRequest(enrolledCourseResult.Error);
+    }
+
+    [HttpPost("[action]")]
+    public async Task<IActionResult> TeacherSetGrade([FromQuery] int teacherId, [FromQuery] int StudentId,
+        [FromQuery] int courseId, [FromQuery] float grade)
+    {
+        TeacherSetGradeCommand command = new TeacherSetGradeCommand
+        {
+            CourseId = courseId,
+            Grade = grade,
+            TeacherId = teacherId,
+            StudentId = StudentId
+        };
         
-        
+        var result = await _mediator.Send(command);
+
+        if (result.IsSuccess)
+        {
+            return Ok(result.Value);
+        }
+        return BadRequest(result.Error);
         
     }
 }

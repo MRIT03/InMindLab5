@@ -28,24 +28,9 @@ public class StudentRepository : IRepository<Student>
 
     public async Task<List<Student>> GetAllAsync()
     {
-        String cacheKey = "Students";
-        string? cacheData = await _cache.GetStringAsync(cacheKey);
-        if (!string.IsNullOrEmpty(cacheData))
-        {
-            return JsonSerializer.Deserialize<List<Student>>(cacheData);
-        }
-        var students = await _dbContext.Students.ToListAsync();
-        if (students.Count > 0)
-        {
-            var options = new DistributedCacheEntryOptions()
-            {
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30),
-            };
-            await _cache.SetStringAsync(cacheKey, JsonSerializer.Serialize(students), options);
-        }
         
+        return await _dbContext.Students.ToListAsync();
         
-        return students;
     }
 
     public async Task AddAsync(Student entity)

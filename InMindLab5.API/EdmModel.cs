@@ -13,7 +13,7 @@ namespace InMindLab5.API
             
             builder.EntitySet<StudentDto>("Students");
             builder.EntitySet<CourseDto>("Courses");
-
+            builder.EntityType<StudentDto>().Property(x => x.Name).IsFilterable();
            
             var teacher = builder.EntitySet<TeacherDto>("Teachers").EntityType;
             teacher.HasKey(t => t.Id);
