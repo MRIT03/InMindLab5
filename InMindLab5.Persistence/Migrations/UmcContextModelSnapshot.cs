@@ -114,6 +114,9 @@ namespace InMindLab5.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("ProfilePictureUrl")
+                        .HasColumnType("text");
+
                     b.Property<bool>("canApplyToFrance")
                         .HasColumnType("boolean");
 

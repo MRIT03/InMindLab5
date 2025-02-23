@@ -2,6 +2,7 @@
 using InMindLab5.Application.Commands;
 using InMindLab5.Application.ViewModels;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -89,5 +90,47 @@ public class UniversityController : ControllerBase
         }
         return BadRequest(result.Error);
         
+    }
+    
+    [HttpPost("[action]")]
+    [Consumes("multipart/form-data")]
+    public async Task<IActionResult> UploadImage([FromForm] IFormFile file, [FromQuery] int StudentId)
+    {
+        if (file == null || file.Length == 0)
+            return BadRequest("File not good!");
+
+        try
+        {
+            var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", file.FileName);
+
+            // Ensure directory exists
+            if (!Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images")))
+                Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images"));
+
+
+            StudentUploadPictureCommand command = new StudentUploadPictureCommand
+            {
+                StudentID = StudentId,
+                PictureName = file.FileName
+            };
+            var result = await _mediator.Send(command);
+            if (!result.IsSuccess)
+            {
+                return BadRequest(result.Error);
+            }
+            using (var stream = new FileStream(path, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+            return Ok(result.Value);
+            
+            
+            
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+       
     }
 }

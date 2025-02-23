@@ -9,4 +9,5 @@ public class Student
     [Range(0.0, 20.0)]
     public float? GradePointAverage { get; set; }
     public bool canApplyToFrance { get; set; }
+    public string? ProfilePictureUrl { get; set; }
 }
