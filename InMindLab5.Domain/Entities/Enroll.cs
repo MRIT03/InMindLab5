@@ -1,4 +1,6 @@
-﻿namespace InMindLab5.Domain.Entities;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace InMindLab5.Domain.Entities;
 
 public class Enroll
 {
@@ -11,6 +13,8 @@ public class Enroll
         get => _enrollDate;
         set => _enrollDate = DateTime.SpecifyKind(value, DateTimeKind.Utc);
     }
+    [Range(0.0, 20.0)]
+    public float? Grade {get;set;}
     
     public virtual Student Student { get; set; }
     public virtual Course Course { get; set; }

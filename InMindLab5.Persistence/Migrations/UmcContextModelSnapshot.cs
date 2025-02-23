@@ -84,6 +84,9 @@ namespace InMindLab5.Persistence.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<float?>("Grade")
+                        .HasColumnType("real");
+
                     b.Property<int>("StudentId")
                         .HasColumnType("integer");
 
@@ -104,9 +107,18 @@ namespace InMindLab5.Persistence.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("StudentId"));
 
+                    b.Property<float?>("GradePointAverage")
+                        .HasColumnType("real");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<string>("ProfilePictureUrl")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("canApplyToFrance")
+                        .HasColumnType("boolean");
 
                     b.HasKey("StudentId");
 
