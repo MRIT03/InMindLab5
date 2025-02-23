@@ -17,5 +17,12 @@ public class UmcContext : DbContext
     public DbSet<Enroll> Enrollments { get; set; }
     public DbSet<TeacherCourse> TeacherCourses { get; set; }
 
-    
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Course>()
+            .HasOne(c => c.Admin) 
+            .WithMany(a => a.Courses) 
+            .HasForeignKey(c => c.AdminId) 
+            .OnDelete(DeleteBehavior.Restrict); 
+    }
 }
