@@ -1,19 +1,26 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using InMindLab5.Domain.Entities;
 using InMindLab5.Persistence.Data;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Configuration;
+using StackExchange.Redis;
 
 namespace InMindLab5.Persistence.Data.Repositories;
 
 public class TeacherRepository : IRepository<Teacher>
 {
     private readonly UmcContext _dbContext;
-
-    public TeacherRepository(UmcContext dbContext)
+    private readonly IDistributedCache _cache;
+    private readonly IConnectionMultiplexer _redis;
+    public TeacherRepository(UmcContext dbContext, IDistributedCache cache, IConnectionMultiplexer redis)
     {
         _dbContext = dbContext;
+        _cache = cache;
+        _redis = redis;
         Query = _dbContext.Teachers;
     }
 
@@ -21,7 +28,25 @@ public class TeacherRepository : IRepository<Teacher>
 
     public async Task<List<Teacher>> GetAllAsync()
     {
-        return await _dbContext.Teachers.ToListAsync();
+        string cacheKey = "teachers";
+        string? cacheData = await _cache.GetStringAsync(cacheKey);
+        
+        if (!string.IsNullOrEmpty(cacheData))
+        {
+            return JsonSerializer.Deserialize<List<Teacher>>(cacheData);
+        }
+
+        var teachers = await _dbContext.Teachers.ToListAsync();
+        if (teachers.Count > 0)
+        {
+            var options = new DistributedCacheEntryOptions()
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(30),
+            };
+            await _cache.SetStringAsync(cacheKey, JsonSerializer.Serialize(teachers), options);
+        }
+        
+        return teachers;
     }
 
     public async Task AddAsync(Teacher entity)
