@@ -25,7 +25,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.AspNet.WebApi.Versioning" Version="5.1.0" />
+      <PackageReference Include="Asp.Versioning.Mvc" Version="8.1.0" />
+      <PackageReference Include="Asp.Versioning.OData" Version="8.1.0" />
+      
     </ItemGroup>
 
 </Project>

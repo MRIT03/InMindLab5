@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Asp.Versioning;
+using MediatR;
 using InMindLab5.Application.Commands;
 using InMindLab5.Domain.Entities;
 using InMindLab5.Persistence.Data.Repositories;
@@ -9,10 +10,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+var defaultVersion = builder.Configuration.GetValue<string>("ApiVersioning:DefaultVersion") ?? "1.0";
+
 var configuration = builder.Configuration;
-Console.WriteLine($"Database Connection String: {configuration.GetConnectionString("UniversityConnection")}");
+builder.Services.AddApiVersioning().AddMvc();
+
 // Add DbContext for PostgreSQL
 builder.Services.AddDbContext<UmcContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("UniversityConnection")));
@@ -27,8 +32,11 @@ builder.Services.AddScoped<IRepository<TeacherCourse>, TeacherCourseRepository>(
 builder.Services.AddScoped<IRepository<Course>, CourseRepository>();
 builder.Services.AddScoped<IRepository<Enroll>, EnrollRepository>();
 
-// Add Controllers
+
 builder.Services.AddControllers();
+
+
+
 
 var app = builder.Build();
 
