@@ -3,13 +3,13 @@ using InMindLab5.Application.ViewModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Web.Http;
-using Microsoft.A;
+
 namespace InMindLab5.Application.Controllers;
 
 
 [ApiController]
-[Route("api/v{version:apiVersion}/[controller]")]
-[ApiVersion("1.0")]
+[Route("api/[controller]")]
+
 public class UniversityController : ControllerBase
 {
     private readonly IMediator _mediator;
