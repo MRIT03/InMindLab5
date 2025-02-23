@@ -2,8 +2,24 @@
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
+        <OutputType>Library</OutputType>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
+
+    <ItemGroup>
+      <Folder Include="Queries\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="MediatR" Version="12.4.1" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\InMindLab5.Common\InMindLab5.Common.csproj" />
+      <ProjectReference Include="..\InMindLab5.Domain\InMindLab5.Domain.csproj" />
+      <ProjectReference Include="..\InMindLab5.Persistence\InMindLab5.Persistence.csproj" />
+    </ItemGroup>
+
 
 </Project>

@@ -3,7 +3,29 @@
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
+        <OutputType>exe</OutputType>
         <Nullable>enable</Nullable>
     </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\InMindLab5.Application\InMindLab5.Application.csproj" />
+      <ProjectReference Include="..\InMindLab5.Persistence\InMindLab5.Persistence.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Update="appsettings.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="appsettings.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.AspNet.WebApi.Versioning" Version="5.1.0" />
+    </ItemGroup>
 
 </Project>
