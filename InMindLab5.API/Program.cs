@@ -25,6 +25,9 @@ builder.Services.AddDbContext<UmcContext>(options =>
 
 var redisConnection = builder.Configuration.GetValue<string>("Redis:ConnectionString");
 
+builder.Services.AddMemoryCache();
+
+
 
 builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect(redisConnection));
 
@@ -66,6 +69,8 @@ if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
 }
+
+
 
 app.UseRouting();
 app.UseAuthorization();
