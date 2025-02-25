@@ -2,6 +2,6 @@
 
 public interface IBackgroundJobService
 {
-    public void RunHourlyJob();
-    public void SendDailyEmails();
+    public Task RunHourlyJob();
+    public Task SendDailyEmails();
 }

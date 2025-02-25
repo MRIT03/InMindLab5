@@ -1,5 +1,7 @@
 ﻿using InMindLab5.Application.Commands;
+using MailKit.Net.Smtp;
 using MediatR;
+using MimeKit;
 
 namespace InMindLab5.Infrastructure.BackgroundJobs;
 
@@ -14,7 +16,7 @@ public class BackgroundJobService : IBackgroundJobService
         _mediator = mediator;
     }
 
-    public async void RunHourlyJob()
+    public async Task RunHourlyJob()
     {
         _logger.LogInformation("Hourly job executed at: {Time}", DateTime.UtcNow);
         // Business logic for hourly job
@@ -24,9 +26,30 @@ public class BackgroundJobService : IBackgroundJobService
     }
 
    
-    public void SendDailyEmails()
+    public async Task SendDailyEmails()
     {
         _logger.LogInformation("Daily mailing job executed at: {Time}", DateTime.UtcNow);
-        // Business logic for email job
+        var email = new MimeMessage();
+         email.From.Add(new MailboxAddress("My Website", "info@MyWebsiteDomainName.com"));
+         email.To.Add(new MailboxAddress("", "recipient@example.com"));
+         email.Cc.Add(new MailboxAddress("", "MyEmailID@gmail.com"));  // CC recipient
+         email.Subject = "Test Email from .NET";
+         email.Body = new TextPart("html")
+         {
+             Text = "<h1>Hello!</h1><p>This is a test email from .NET using MailKit.</p>"
+         };
+         using var smtp = new SmtpClient();
+         try
+         {
+             await smtp.ConnectAsync("mail.MyWebsiteDomainName.com", 587, MailKit.Security.SecureSocketOptions.StartTls);
+             await smtp.AuthenticateAsync("info@MyWebsiteDomainName.com", "myIDPassword");
+             await smtp.SendAsync(email);
+             await smtp.DisconnectAsync(true);
+             Console.WriteLine("Email sent successfully!");
+         }
+         catch (Exception ex)
+         {
+             Console.WriteLine($"Error sending email: {ex.Message}");
+         }
     }
 }

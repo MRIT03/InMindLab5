@@ -107,6 +107,9 @@ namespace InMindLab5.Persistence.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("StudentId"));
 
+                    b.Property<string>("Email")
+                        .HasColumnType("text");
+
                     b.Property<float?>("GradePointAverage")
                         .HasColumnType("real");
 
