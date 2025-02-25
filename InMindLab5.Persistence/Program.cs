@@ -1,4 +1,4 @@
-﻿using InMindLab5.Persistence.Data;
+using InMindLab5.Persistence.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
