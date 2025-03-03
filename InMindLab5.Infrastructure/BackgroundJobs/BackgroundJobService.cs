@@ -1,19 +1,22 @@
 ﻿using InMindLab5.Application.Commands;
+using InMindLab5.Application.Queries;
 using MailKit.Net.Smtp;
 using MediatR;
 using MimeKit;
-
+using InMindLab5.Infrastructure.Services;
 namespace InMindLab5.Infrastructure.BackgroundJobs;
 
 public class BackgroundJobService : IBackgroundJobService
 {
     private readonly ILogger<BackgroundJobService> _logger;
     private readonly IMediator _mediator;
+    private readonly IEmailService _emailService;
 
-    public BackgroundJobService(ILogger<BackgroundJobService> logger, IMediator mediator)
+    public BackgroundJobService(ILogger<BackgroundJobService> logger, IMediator mediator, IEmailService emailService)
     {
         _logger = logger;
         _mediator = mediator;
+        _emailService = emailService;
     }
 
     public async Task RunHourlyJob()
@@ -28,28 +31,20 @@ public class BackgroundJobService : IBackgroundJobService
    
     public async Task SendDailyEmails()
     {
+        
+
+        var mailingList = await _mediator.Send(new CreateMailingListQuery());
         _logger.LogInformation("Daily mailing job executed at: {Time}", DateTime.UtcNow);
-        var email = new MimeMessage();
-         email.From.Add(new MailboxAddress("My Website", "info@MyWebsiteDomainName.com"));
-         email.To.Add(new MailboxAddress("", "recipient@example.com"));
-         email.Cc.Add(new MailboxAddress("", "MyEmailID@gmail.com"));  // CC recipient
-         email.Subject = "Test Email from .NET";
-         email.Body = new TextPart("html")
-         {
-             Text = "<h1>Hello!</h1><p>This is a test email from .NET using MailKit.</p>"
-         };
-         using var smtp = new SmtpClient();
-         try
-         {
-             await smtp.ConnectAsync("mail.MyWebsiteDomainName.com", 587, MailKit.Security.SecureSocketOptions.StartTls);
-             await smtp.AuthenticateAsync("info@MyWebsiteDomainName.com", "myIDPassword");
-             await smtp.SendAsync(email);
-             await smtp.DisconnectAsync(true);
-             Console.WriteLine("Email sent successfully!");
-         }
-         catch (Exception ex)
-         {
-             Console.WriteLine($"Error sending email: {ex.Message}");
-         }
+        foreach (var entry in mailingList)
+        {
+            var to = entry.Key.Email;
+            var subject = "Reminder: " + entry.Value.Name + " Deadline";
+            var Body = "The deadline for enrollment for the following course:" + entry.Value.Name +
+                       "\nIs on the following day:" + entry.Value.EnrollEnd;
+            _emailService.SendEmailAsync(to, subject, Body);
+
+            
+        }
+        Console.WriteLine("Email sent successfully (Mailtrap)!");
     }
 }
