@@ -1,4 +1,5 @@
-﻿using Asp.Versioning;
+﻿using System.Globalization;
+using Asp.Versioning;
 using Hangfire;
 using Hangfire.PostgreSql;
 using InMindLab5.API;
@@ -10,10 +11,12 @@ using InMindLab5.Persistence.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using InMindLab5.Persistence.Data;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.OData;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using StackExchange.Redis;
 
 
@@ -54,6 +57,14 @@ builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("Emai
 builder.Services.AddScoped<IEmailService, EmailService>();
 
 
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+
+
+
+
+
+
 // Register MediatR
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(AdminCreateCourseCommand).Assembly));
 
@@ -78,7 +89,26 @@ builder.Services.AddControllers()
 builder.Services.AddApiVersioning().AddMvc();
 builder.Services.AddApiVersioning().AddOData();
 
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    var supportedCultures = new List<CultureInfo>
+    {
+        new CultureInfo("en"),
+        new CultureInfo("fr")
+    };
+
+    // Set French as the default culture
+    options.DefaultRequestCulture = new RequestCulture("fr");
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
+});
+
+
+
 var app = builder.Build();
+
+app.UseRequestLocalization(app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
+
 
 if (app.Environment.IsDevelopment())
 {
@@ -87,6 +117,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHangfireDashboard("/hangfire"); 
 app.UseHangfireServer();
+
+app.UseRequestLocalization(app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
 
 var jobService = app.Services.GetRequiredService<IBackgroundJobService>();
 
