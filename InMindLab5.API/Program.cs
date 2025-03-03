@@ -1,8 +1,11 @@
 ﻿using Asp.Versioning;
+using Hangfire;
+using Hangfire.PostgreSql;
 using InMindLab5.API;
 using MediatR;
 using InMindLab5.Application.Commands;
 using InMindLab5.Domain.Entities;
+using InMindLab5.Infrastructure.BackgroundJobs;
 using InMindLab5.Persistence.Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using InMindLab5.Persistence.Data;
@@ -38,6 +41,14 @@ builder.Services.AddStackExchangeRedisCache(options =>
 
 
 
+builder.Services.AddHangfire(config => config
+    .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+    .UseSimpleAssemblyNameTypeSerializer()
+    .UseRecommendedSerializerSettings()
+    .UsePostgreSqlStorage(builder.Configuration.GetConnectionString("HangfireConnection"))
+);
+builder.Services.AddHangfireServer();
+
 
 // Register MediatR
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(AdminCreateCourseCommand).Assembly));
@@ -50,7 +61,7 @@ builder.Services.AddScoped<IRepository<Course>, CourseRepository>();
 builder.Services.AddScoped<IRepository<Enroll>, EnrollRepository>();
 builder.Services.AddScoped<IRepository<Teacher>, TeacherRepository>();
 builder.Services.AddScoped<IRepository<Student>, StudentRepository>();
-
+builder.Services.AddScoped<IBackgroundJobService, BackgroundJobService>();
 
 builder.Services.AddControllers()
     .AddOData(options =>
@@ -70,7 +81,22 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 }
 
+app.UseHangfireDashboard("/hangfire"); 
+app.UseHangfireServer();
 
+var jobService = app.Services.GetRequiredService<IBackgroundJobService>();
+
+RecurringJob.AddOrUpdate(
+    "hourly-job",
+    () => jobService.RunHourlyJob(),
+    Cron.Hourly
+);
+
+RecurringJob.AddOrUpdate(
+    "daily-email-job",
+    () => jobService.SendDailyEmails(),
+    Cron.Daily(8)
+);
 
 app.UseRouting();
 app.UseAuthorization();

@@ -9,6 +9,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\InMindLab5.Application\InMindLab5.Application.csproj" />
+      <ProjectReference Include="..\InMindLab5.Infrastructure\InMindLab5.Infrastructure.csproj" />
       <ProjectReference Include="..\InMindLab5.Persistence\InMindLab5.Persistence.csproj" />
     </ItemGroup>
 
@@ -27,6 +28,8 @@
     <ItemGroup>
       <PackageReference Include="Asp.Versioning.Mvc" Version="8.1.0" />
       <PackageReference Include="Asp.Versioning.OData" Version="8.1.0" />
+      <PackageReference Include="Hangfire" Version="1.8.18" />
+      <PackageReference Include="Hangfire.PostgreSql" Version="1.20.10" />
       <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.0" />
       <PackageReference Include="Microsoft.AspNetCore.OData" Version="9.2.0" />
       <PackageReference Include="Microsoft.AspNetCore.OData.NewtonsoftJson" Version="8.2.0" />

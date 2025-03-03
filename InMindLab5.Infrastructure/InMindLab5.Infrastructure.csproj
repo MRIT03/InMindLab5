@@ -7,4 +7,13 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="MailKit" Version="4.10.0" />
+      <PackageReference Include="MediatR" Version="12.4.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\InMindLab5.Application\InMindLab5.Application.csproj" />
+    </ItemGroup>
+
 </Project>
