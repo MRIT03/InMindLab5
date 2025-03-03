@@ -17,12 +17,23 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using Serilog;
 using StackExchange.Redis;
 
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
+
+// ✅ 1. Configure Serilog
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Debug() // Log everything Debug and above (Debug, Info, Warning, Error)
+    .WriteTo.Console()    // Logs to the console
+    .WriteTo.File("logs/app.log", rollingInterval: RollingInterval.Day) // Logs to a file, creates a new log file each day
+    .WriteTo.Seq("http://localhost:5341") 
+    .CreateLogger();
+
+builder.Host.UseSerilog();
 
 // Add DbContext for PostgreSQL
 builder.Services.AddDbContext<UmcContext>(options =>
@@ -108,7 +119,7 @@ builder.Services.Configure<RequestLocalizationOptions>(options =>
 var app = builder.Build();
 
 app.UseRequestLocalization(app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
-
+app.UseSerilogRequestLogging();
 
 if (app.Environment.IsDevelopment())
 {
