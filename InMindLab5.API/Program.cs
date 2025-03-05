@@ -5,6 +5,7 @@ using Hangfire.PostgreSql;
 using InMindLab5.API;
 using MediatR;
 using InMindLab5.Application.Commands;
+using InMindLab5.Application.Services;
 using InMindLab5.Domain.Entities;
 using InMindLab5.Infrastructure.BackgroundJobs;
 using InMindLab5.Persistence.Data.Repositories;
@@ -34,6 +35,9 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 
 builder.Host.UseSerilog();
+builder.Services.AddSingleton<IMessagePublisher>(sp =>
+    new RabbitMqMessagePublisher("localhost", "CourseExchange"));
+
 
 // Add DbContext for PostgreSQL
 builder.Services.AddDbContext<UmcContext>(options =>
