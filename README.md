@@ -1,4 +1,4 @@
-# Hello Andrea !
+# Hello Elie !
 
 # Database 
 
@@ -7,6 +7,8 @@ To solve the given tasks I implemented the following database. The design allowe
 ![image](https://github.com/user-attachments/assets/f021573f-24b9-4e41-a533-e73bfa77a7ba)
 
 The database was first codded as entities in dotnet, and it was later translated into PostgreSql through the entity framework. To do so, the entities were declared in the Entities folder as part of the Domain section.
+
+The dataase was then divided into several schemas. The student schema containing the student table. The admin schema contains the admin table. Finally, the teacher schema contains the teacher table and the teacher_course table. The course table and the enrollement tables were left public as it made sense to be accessible by different tenants.
 
 In the Persistence layer, I installed the Entity Framework and declared it as a dependency, then I defined the DBContext as UmcContext. 
 
@@ -26,6 +28,10 @@ I started the application layer by creating the view models and the mappers. The
 The view models were straightforward, they were just the original entities with sometimes fewer properties or renamed properties. While automapper could have been used to map between the entities and their respective DTOs, I decided to keep it simple and use my own custom mappers.
 
 Finally, for mediatR integration, I used the command and queries directories. I used the commands to perfrom the wanted operations, and the queries to perform entity retrieval. 
+
+For RabbitMQ, the command to create a course would finish by calling a rabbitMq service that would broadcast the created course on a channel with a specific exchange name. The reciever would have to continue listening until that channel is created. Once it is created they would connect to it and receive the message.
+
+As for multi-tenancy, it was done using seperate controllers. Each controller allowed its respective tenant to do what they would be allowed to do, no more, no less. The admin controller had privilleged access in the sense that it is allowed to read data from seperate schemas only, but not write.
 
 The commands and queries are simple as they leveraged the pre existing repositories and view models to perfrom data transfer and CRUD operations. 
 
