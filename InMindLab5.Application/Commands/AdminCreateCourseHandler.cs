@@ -6,17 +6,23 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using InMindLab5.Application.Mappers;
+using InMindLab5.Application.Services;
+using InMindLab5.Application.Services;
+
 namespace InMindLab5.Application.Commands;
 
 public class AdminCreateCourseHandler : IRequestHandler<AdminCreateCourseCommand, CourseDto>
 {
     private readonly IRepository<Course> _courseRepository;
     private readonly IRepository<Admin> _adminRepository; 
+    private readonly IMessagePublisher _messagePublisher;
 
-    public AdminCreateCourseHandler(IRepository<Course> courseRepository, IRepository<Admin> adminRepository)
+
+    public AdminCreateCourseHandler(IRepository<Course> courseRepository, IRepository<Admin> adminRepository, IMessagePublisher messagePublisher)
     {
         _courseRepository = courseRepository;
         _adminRepository = adminRepository;
+        _messagePublisher = messagePublisher;
     }
 
     public async Task<CourseDto> Handle(AdminCreateCourseCommand request, CancellationToken cancellationToken)
@@ -34,6 +40,13 @@ public class AdminCreateCourseHandler : IRequestHandler<AdminCreateCourseCommand
         };
 
         await _courseRepository.AddAsync(newCourse);
+        CourseCreatedEvent cce = new CourseCreatedEvent
+        {
+            CourseId = request.CourseToBeCreated.Id,
+            Name = request.CourseToBeCreated.Title,
+            MaxNb = request.CourseToBeCreated.MaxStudents,
+        };
+        _messagePublisher.PublishCourseCreated(cce);
 
         return request.CourseToBeCreated;
     }

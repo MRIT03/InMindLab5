@@ -10,10 +10,16 @@
     <ItemGroup>
       <PackageReference Include="MailKit" Version="4.10.0" />
       <PackageReference Include="MediatR" Version="12.4.1" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+      <PackageReference Include="RabbitMQ.Client" Version="7.1.1" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\InMindLab5.Application\InMindLab5.Application.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Model\" />
     </ItemGroup>
 
 </Project>
